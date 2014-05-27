@@ -1,7 +1,19 @@
-# require(quantmod)
-# require(party)
-
 prefixTree <- function(x, maxTreeDepth=3) {
+  # Discretizes x into up/down values and checks if certain patterns have predictive power
+  #
+  # Args:
+  #   x: 1-dimensional numeric data series
+  #   maxTreeDepth: max pattern length to analyze
+  #
+  # Returns:
+  #   List of pattern statistics (result$DDD -> what happens after 3 negative observations?)
+  #
+  # Call:
+  #   prefixTree(rnorm(100))
+  #
+  # TODO:
+  #   Validate inputs; error handling
+  
   discrete <- ifelse(x > 0, "U", "D")
   
   result <- list()
@@ -21,12 +33,10 @@ prefixTree <- function(x, maxTreeDepth=3) {
     }
   }
   
-  #result$up.percent <- lapply(result, function(x) { x$up / x$count })
-  
   for (name in names(result)) {
     result[[name]]$up.percent <- result[[name]]$up / result[[name]]$count
     result[[name]]$t.stat <- (result[[name]]$up.percent - 0.5) / sqrt(0.25 / result[[name]]$count)
-    result[[name]]$p.value <- pt(result[[name]]$t.stat, df=result[[name]]$count-1, lower.tail=FALSE)
+    result[[name]]$p.value <- binom.test(x=result[[name]]$up, n=result[[name]]$count, alternative="two.sided")$p.value
   }
   
   return(result)
