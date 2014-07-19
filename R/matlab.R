@@ -1,16 +1,19 @@
 # Variety of functions to imitate useful MATLAB functions
 
-tic <- function(gcFirst = TRUE, type=c("elapsed", "user.self", "sys.self")) {
+tic <- function(gc.first = TRUE, type=c("elapsed", "user.self", "sys.self")) {
   # Begins a timer; used in conjunction with toc()
   #
   # Call:
   #   tic(); factorial(21); toc()
-
+  #
+  # Returns:
+  #   N/A
+  
   type <- match.arg(type)
-  assign(".type", type, envir=baseenv())
-  if(gcFirst) gc(FALSE)
+  assign(".type", type, envir = baseenv())
+  if (gc.first) gc(FALSE)
   tic <- proc.time()[type]         
-  assign(".tic", tic, envir=baseenv())
+  assign(".tic", tic, envir = baseenv())
   invisible(tic)
 }
 
@@ -19,10 +22,13 @@ toc <- function() {
   #
   # Call:
   #   tic(); factorial(21); toc()
-
-  type <- get(".type", envir=baseenv())
+  #
+  # Returns:
+  #   Elapsed time in seconds
+  
+  type <- get(".type", envir = baseenv())
   toc <- proc.time()[type]
-  tic <- get(".tic", envir=baseenv())
+  tic <- get(".tic", envir = baseenv())
   print(toc - tic)
   invisible(toc)
 }

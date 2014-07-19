@@ -4,4 +4,4 @@ getSymbols("SPY")
 
 returns <- na.omit(Delt(Ad(SPY)))
 
-chains <- prefixTree(returns, maxTreeDepth=5)
+chains <- PrefixTree(returns, max.tree.depth = 5)
