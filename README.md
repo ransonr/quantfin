@@ -7,5 +7,5 @@ All attempts are made to keep syntax as clean and concise as possible. Google kn
 
 To-do list:
   * Test portfolio for cointegration (in the form of CointPortfolio(SPY ~ TLT + HYG + VXX))
-  * ~~Observed discrete pattern probabilities (P(U|DDD), P(D|UDU), etc...)~~ prefixTree.R
+  * ~~Observed discrete pattern probabilities (P(U|DDD), P(D|UDU), etc...)~~ PrefixTree.R
   * Easy multiple linear regression of each column of one data frame against all columns of another data frame
