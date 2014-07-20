@@ -32,9 +32,24 @@ RollingPCAPrediction <- function(x, lookback = 100, variance.explained = 0.95) {
     stop("variance.explained must be between 0 and 1")
   }
   
+  prediction.error <- data.frame()
+  
   # Yes, I know loops are bad in R -> maybe I'll optimize this someday
   for (i in (lookback + 1):nrow(x)) {
-    pca <- princomp(x[(i - lookback):(i - 1), ])
+    temp <- x[(i - lookback):(i - 1), ]
     
+    # Run pca and regress all columns of x on top principal components
+    pca <- prcomp(temp)
+    num.factors <- match(TRUE, cumsum(pca$sdev ^ 2) / sum(pca$sdev ^ 2) > variance.explained)
+    betas <- apply(temp, 2, function(x) { summary(lm(x ~ pca$x[, 1:num.factors]))$coef[, 1] })
+    
+    # Calculate current principal component values
+    current.values.scaled <- x[i, ] - pca$center
+    prin.comps <- as.matrix(current.values.scaled) %*% as.matrix(pca$rotation[, 1:num.factors])
+    
+    predictions <- (c(1, prin.comps) %*% betas) + pca$center
+    prediction.error <- rbind(prediction.error, predictions - x[i, ])
   }
+  
+  list(Actual = x[(lookback + 1):nrow(x), ], PredictionError = prediction.error)
 }
