@@ -51,5 +51,7 @@ RollingPCAPrediction <- function(x, lookback = 100, variance.explained = 0.95) {
     prediction.error <- rbind(prediction.error, predictions - x[i, ])
   }
   
-  list(Actual = x[(lookback + 1):nrow(x), ], PredictionError = prediction.error)
+  list(Predictions = x[(lookback + 1):nrow(x), ] + prediction.error, 
+       Actual = x[(lookback + 1):nrow(x), ], 
+       PredictionError = prediction.error)
 }
