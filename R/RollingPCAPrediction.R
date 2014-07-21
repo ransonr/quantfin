@@ -47,7 +47,7 @@ RollingPCAPrediction <- function(x, lookback = 100, variance.explained = 0.95) {
     current.values.scaled <- x[i, ] - pca$center
     prin.comps <- as.matrix(current.values.scaled) %*% as.matrix(pca$rotation[, 1:num.factors])
     
-    predictions <- (c(1, prin.comps) %*% betas) + pca$center
+    predictions <- (c(1, prin.comps) %*% betas) #+ pca$center
     prediction.error <- rbind(prediction.error, predictions - x[i, ])
   }
   
