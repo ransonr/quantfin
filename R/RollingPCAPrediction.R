@@ -41,7 +41,7 @@ RollingPCAPrediction <- function(x, lookback = 100, variance.explained = 0.95) {
     # Run pca and regress all columns of x on top principal components
     pca <- prcomp(temp)
     num.factors <- match(TRUE, cumsum(pca$sdev ^ 2) / sum(pca$sdev ^ 2) > variance.explained)
-    betas <- apply(temp, 2, function(x) { summary(lm(x ~ pca$x[, 1:num.factors]))$coef[, 1] })
+    betas <- apply(temp, 2, function(z) { summary(lm(z ~ pca$x[, 1:num.factors]))$coef[, 1] })
     
     # Calculate current principal component values
     current.values.scaled <- x[i, ] - pca$center
