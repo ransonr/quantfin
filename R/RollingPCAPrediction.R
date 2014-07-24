@@ -33,6 +33,7 @@ RollingPCAPrediction <- function(x, lookback = 100, variance.explained = 0.95) {
   }
   
   prediction.error <- data.frame()
+  factors.needed <- data.frame()
   
   # Yes, I know loops are bad in R -> maybe I'll optimize this someday
   for (i in (lookback + 1):nrow(x)) {
@@ -49,9 +50,13 @@ RollingPCAPrediction <- function(x, lookback = 100, variance.explained = 0.95) {
     
     predictions <- (c(1, prin.comps) %*% betas) #+ pca$center
     prediction.error <- rbind(prediction.error, predictions - x[i, ])
+    factors.needed <- rbind(factors.needed, num.factors)
   }
+  
+  rownames(factors.needed) <- rownames(prediction.error)
   
   list(Predictions = x[(lookback + 1):nrow(x), ] + prediction.error, 
        Actual = x[(lookback + 1):nrow(x), ], 
-       PredictionError = prediction.error)
+       PredictionError = prediction.error,
+       FactorsNeeded = factors.needed)
 }
