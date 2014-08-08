@@ -21,6 +21,11 @@ VarianceRatio <- function(x, max.period = 10) {
   
   result <- c()
   
+#   mu <- (log(tail(x, 1)) - log(head(x, 1))) * (1 / length(x))
+#   sigma.a <- sum((diff(log(x)) - mu) ^ 2) * (1 / length(x))
+#   sigma.b <- sum((diff(log(x), lag = 2) - mu) ^ 2) * (1 / length(x))
+#   j <- sigma.b / sigma.a - 1
+  
   var.1 <- var(log(tail(x, -1) / head(x, -1)))
   
   for (i in 2:max.period) {
